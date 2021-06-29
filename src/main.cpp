@@ -7,7 +7,7 @@
 #include "GyverTimer.h"
  //  https://arduino-kit.ru/blogs/blog/project_33
  // https://microkontroller.ru/arduino-projects/gps-spidometr-na-arduino-i-oled-displee-svoimi-rukami/
-
+ // https://eax.me/stm32-st7735/
 
 #define TFT_CS     10
 #define TFT_RST    9  // you can also connect this to the Arduino reset
