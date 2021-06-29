@@ -20,6 +20,9 @@ void beep(int t1,int t2){
 void shortbeep(void){
   beep(125,150);
  }
+void silentbeep(void){
+  beep(30,150);
+} 
 void longbeep(void){
   beep(250,250);
  }
