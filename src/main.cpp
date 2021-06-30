@@ -20,6 +20,11 @@ static void smartDelay(unsigned long ms)
       gps.encode(ss.read());
   } while (millis() - start < ms);
 }
+
+void SetTimeDate(int dd,int dm,int dy,int th,int tm,int ts){
+    Serial.println("SET!!!");
+}
+
 int cnt=1;
 void setup()
 {
@@ -53,17 +58,33 @@ void loop()
 {
   Serial.print(gps.satellites.value());
   Serial.print("   ");
-  Serial.print(gps.date.day());
+  int dd=gps.date.day()
+  Serial.print(dd);
   Serial.print(".");
-  Serial.print(gps.date.month());
+
+  int dm=gps.date.month();
+  Serial.print(dm);
   Serial.print(".");
-  Serial.print(gps.date.year());
+
+  int dy=gps.date.year();
+  Serial.print(dy);
   Serial.print("   ");
-  Serial.print(gps.time.hour()+3);
+
+  int th=gps.time.hour()+3;
+  Serial.print(th);
   Serial.print(":");
-  Serial.print(gps.time.minute());
+
+  int tm=gps.time.minute();
+  Serial.print(tm);
   Serial.print(":");
-  Serial.print(gps.time.second());
+
+  int ts=gps.time.second();
+  Serial.print(ts);
+
+  if(ts==0&&tm==0){
+      SetTimeDate(dd,dm,dy,th,tm,ts);
+  }
+
   Serial.print("   ");
   Serial.print(gps.speed.kmph());
   Serial.println();
