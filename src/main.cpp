@@ -25,6 +25,18 @@ void setup()
 {
   initbeep();
   dshortbeep();
+/*
+  tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
+  // Use this initializer (uncomment) if you're using a 1.44" TFT
+  //tft.initR(INITR_144GREENTAB);   // initialize a ST7735S chip, black tab 
+  tft.fillScreen(ST7735_BLACK);
+  tft.setCursor(0, 0);
+  tft.setTextColor(ST7735_WHITE);
+  tft.setTextWrap(true);
+  tft.print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ");
+ */
+
+
   Serial.begin(115200);
   ss.begin(GPSBaud);
 /*
@@ -56,9 +68,13 @@ void loop()
   Serial.print(gps.speed.kmph());
   Serial.println();
   cnt+=1;
-  if(cnt==60) {silentbeep();cnt=0;} 
+  if(cnt==60) {silentbeep();cnt=0;}
+  /*
+   Вывод скорости и прочего раз в секунду
+
+  */ 
   smartDelay(1000);
   
   if (millis() > 5000 && gps.charsProcessed() < 10)
-    Serial.println(F("No GPS data received: check wiring"));
+    Serial.println(F("GPS LOST!!!"));
 }
