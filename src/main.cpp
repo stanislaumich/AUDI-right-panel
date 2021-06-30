@@ -1,6 +1,11 @@
 #include <TinyGPS++.h>
 #include <SoftwareSerial.h>
 #include <beep.cpp>
+#include "TimeLib.h"
+#include "DS1307RTC.h"
+
+tmElements_t stm;
+
 /*
 работает без сбоев
 */
@@ -23,6 +28,13 @@ static void smartDelay(unsigned long ms)
 
 void SetTimeDate(int dd,int dm,int dy,int th,int tm,int ts){
     Serial.println("SET!!!");
+    stm.Hour = th;
+    stm.Minute = tm;
+    stm.Second = ts; 
+    stm.Day = dd;
+    stm.Month = dm + 1;
+    stm.Year = CalendarYrToTm(dy);
+    RTC.write(stm);
 }
 
 int cnt=1;
