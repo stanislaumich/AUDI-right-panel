@@ -58,7 +58,7 @@ void loop()
 {
   Serial.print(gps.satellites.value());
   Serial.print("   ");
-  int dd=gps.date.day()
+  int dd=gps.date.day();
   Serial.print(dd);
   Serial.print(".");
 
