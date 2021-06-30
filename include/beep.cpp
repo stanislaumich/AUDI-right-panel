@@ -1,4 +1,4 @@
-#define pinbeep 2
+#define pinbeep 5
 
 void initbeep(void){
  pinMode(pinbeep, OUTPUT);

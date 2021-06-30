@@ -1,0 +1,123 @@
+#include <Arduino.h>
+#include <Adafruit_GFX.h>    // Core graphics library
+#include <Adafruit_ST7735.h> // Hardware-specific library
+#include <SPI.h> 
+#include <beep.cpp>
+//#include<GyverUART.h>
+#include "GyverTimer.h"
+#include <SoftwareSerial.h>
+#include <TinyGPS.h>
+//#include <TinyGPSPlus.h>
+ //  https://arduino-kit.ru/blogs/blog/project_33
+ // https://microkontroller.ru/arduino-projects/gps-spidometr-na-arduino-i-oled-displee-svoimi-rukami/
+ // https://eax.me/stm32-st7735/
+
+#define TFT_CS     10
+#define TFT_RST    9  // you can also connect this to the Arduino reset in which case, set this #define pin to 0!
+#define TFT_DC     8
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
+
+#define GPS_RX  2
+#define GPS_TX  3
+SoftwareSerial mySerial(GPS_RX, GPS_TX); // RX, TX
+/*
+For 5 Hz you need to change the baud rate to 38400 in order to handle the increased message load in serial port.
+Command for changing the baud rate to 38400:
+$PMTK251,38400*27
+The output in the terminal should show obscured data.
+Then you need to change the baud rate from the terminal program to 38400.
+After you can see NMEA sentences again, you are ready to give next command.
+Command for setting the Fix Rate to 5 Hz:
+$PMTK300,200,0,0,0,0*2F
+
+
+*/
+TinyGPS gps;
+
+GTimer myTimer1(MS, 60000);
+
+float spds, spd;
+
+void setup() {
+  // put your setup code here, to run once:
+  initbeep();
+  dshortbeep();
+  //silentbeep();
+
+  // init GPS
+  mySerial.begin(9600);
+  //mySerial.println("$PMTK251,38400*27");
+  //mySerial.end();
+  //mySerial.begin(38400);
+  //delay(200);
+  //mySerial.println("$PMTK300,200,0,0,0,0*2F");
+  Serial.begin(38400);
+
+  // init TFT
+  tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
+  // Use this initializer (uncomment) if you're using a 1.44" TFT
+  //tft.initR(INITR_144GREENTAB);   // initialize a ST7735S chip, black tab 
+  tft.fillScreen(ST7735_BLACK);
+  tft.setCursor(0, 0);
+  tft.setTextColor(ST7735_WHITE);
+  tft.setTextWrap(true);
+  tft.print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ");
+  //delay(1000);
+  Serial.println("HELLO!!!");
+}
+
+int cnt;
+
+void loop() {
+  bool newData = false;
+  unsigned long chars;
+  unsigned short sentences, failed;
+  // put your main code here, to run repeatedly:
+  //if (mySerial.available())
+  //  Serial.write(mySerial.read());
+  for (unsigned long start = millis(); millis() - start < 1000;)
+  {
+    while (mySerial.available())
+    {
+      char c = mySerial.read();
+      // Serial.write(c); // uncomment this line if you want to see the GPS data flowing
+      if (gps.encode(c)) // Did a new valid sentence come in?
+        newData = true;
+    }
+  }
+
+  if (newData)
+  {
+    float flat, flon;
+    unsigned long age;
+
+    cnt==10?cnt=1:cnt+=1;
+    
+    gps.f_get_position(&flat, &flon, &age);
+    Serial.print("LAT=");
+    Serial.print(flat == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : flat, 6);
+    Serial.print(" LON=");
+    Serial.print(flon == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : flon, 6);
+    Serial.print(" SAT=");
+    Serial.print(gps.satellites() == TinyGPS::GPS_INVALID_SATELLITES ? 0 : gps.satellites());
+    Serial.print(" PREC=");
+    Serial.print(gps.hdop() == TinyGPS::GPS_INVALID_HDOP ? 0 : gps.hdop());
+    Serial.print(" SPEED=");
+    spd=gps.f_speed_kmph();
+    Serial.print(spd);
+    if(cnt==1){
+     Serial.print(" SRED=");
+     Serial.print(spds/10);
+     spds=spd;
+     silentbeep();
+    }
+    else{
+      spds+=spd;
+    }
+    Serial.println("");
+  }
+
+  //if (myTimer1.isReady())
+    //silentbeep();
+
+}
