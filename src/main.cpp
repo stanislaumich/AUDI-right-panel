@@ -6,9 +6,8 @@
 
 tmElements_t stm;
 
-/*
-работает без сбоев
-*/
+#define difspeed 0.2
+
 static const int RXPin = 2, TXPin = 3;
 static const uint32_t GPSBaud = 9600;
 
@@ -26,15 +25,30 @@ static void smartDelay(unsigned long ms)
   } while (millis() - start < ms);
 }
 
-void SetTimeDate(int dd,int dm,int dy,int th,int tm,int ts){
-    Serial.println("SET!!!");
-    stm.Hour = th;
-    stm.Minute = tm;
-    stm.Second = ts; 
-    stm.Day = dd;
-    stm.Month = dm + 1;
-    stm.Year = CalendarYrToTm(dy);
-    RTC.write(stm);
+float prevspeed=.0;
+void DisplaySpeed(){
+  float speed=gps.speed.kmph();  
+  if(abs(speed-prevspeed)>difspeed){  
+  Serial.print(gps.satellites.value());
+  Serial.print("   ");
+  Serial.print(speed);
+  Serial.print("  --  ");
+  prevspeed=speed;
+  }
+}
+
+void DisplayDatetime(tmElements_t stm){
+  Serial.print(stm.Day);
+  Serial.print(".");  
+  Serial.print(stm.Month);
+  Serial.print(".");  
+  Serial.print(tmYearToCalendar(stm.Year));
+  Serial.print("   ");  
+  Serial.print(stm.Hour);
+  Serial.print(":");  
+  Serial.print(stm.Minute);
+  Serial.print(":");  
+  Serial.println(stm.Second);
 }
 
 int cnt=1;
@@ -68,43 +82,27 @@ void setup()
 
 void loop()
 {
-  Serial.print(gps.satellites.value());
-  Serial.print("   ");
-  int dd=gps.date.day();
-  Serial.print(dd);
-  Serial.print(".");
-
-  int dm=gps.date.month();
-  Serial.print(dm);
-  Serial.print(".");
-
-  int dy=gps.date.year();
-  Serial.print(dy);
-  Serial.print("   ");
-
-  int th=gps.time.hour()+3;
-  Serial.print(th);
-  Serial.print(":");
-
-  int tm=gps.time.minute();
-  Serial.print(tm);
-  Serial.print(":");
-
-  int ts=gps.time.second();
-  Serial.print(ts);
-
-  if(ts==0&&tm==0){
-      SetTimeDate(dd,dm,dy,th,tm,ts);
+  DisplaySpeed();
+  stm.Day=gps.date.day();
+  stm.Month=gps.date.month();
+  stm.Year=CalendarYrToTm(gps.date.year());
+  stm.Hour=gps.time.hour()+3;
+  stm.Minute=gps.time.minute();
+  stm.Second=gps.time.second();
+  if(stm.Minute==0&&stm.Second==0){
+      RTC.write(stm);
   }
-
-  Serial.print("   ");
-  Serial.print(gps.speed.kmph());
-  Serial.println();
   cnt+=1;
   if(cnt==60) {silentbeep();cnt=0;}
   /*
    Вывод скорости и прочего раз в секунду
+   */
+  //if (RTC.read(stm)) {
+     
+    DisplayDatetime(stm); 
+   //}
 
+/*
   */ 
   smartDelay(1000);
   
