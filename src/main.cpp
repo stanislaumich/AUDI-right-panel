@@ -2,16 +2,25 @@
 #include <SoftwareSerial.h>
 #include <beep.cpp>
 #include "TimeLib.h"
-#include "DS1307RTC.h"
+//#include "DS1307RTC.h"
+/*
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+*/
+
+//#define USE_MICRO_WIRE
+#include "GyverOLED.h"
+GyverOLED oled;
+
+
+
+//#define SCREEN_WIDTH 128 // OLED display width, in pixels
+//#define SCREEN_HEIGHT 32 // OLED display height, in pixels
 #define OLED_RESET     -1 
 //#define SCREEN_ADDRESS 0x3D ///7A   78
 
-Adafruit_SSD1306 display(OLED_RESET);
+//Adafruit_SSD1306 display(OLED_RESET);
 tmElements_t stm;
 
 #define difspeed 0.2
@@ -65,7 +74,7 @@ void DisplayDatetime(tmElements_t stm){
   Serial.print(stm.Minute);
   Serial.print(":");  
   Serial.println(stm.Second);
-
+/*
     display.clearDisplay(); // очистка дисплея
   display.setTextSize(2); // установка размера шрифта
   display.setTextColor(WHITE); // установка цвета текста
@@ -76,7 +85,7 @@ void DisplayDatetime(tmElements_t stm){
   display.print(":");  
   display.println(stm.Second);
   display.display(); // и её выводим на экран
-
+*/
  
 }
 
@@ -85,6 +94,11 @@ void setup()
 {
   initbeep();
   //dshortbeep();
+oled.init(OLED128x64);
+  oled.clear();
+  oled.home();
+
+
 /*
   tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
   // Use this initializer (uncomment) if you're using a 1.44" TFT
@@ -95,6 +109,8 @@ void setup()
   tft.setTextWrap(true);
   tft.print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ");
  */
+
+/*
  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
    // инициализация дисплея по интерфейсу I2C, адрес 0x3C для обычного дисплея 128-674
    //
@@ -105,8 +121,8 @@ void setup()
   display.print ("Hello, world!"); // записываем в буфер дисплея нашу фразу
   display.display(); // и её выводим на экран
  
-
-
+*/
+  oled.println("HELLO!!!");
   Serial.begin(115200);
   ss.begin(GPSBaud);
 /*
@@ -129,7 +145,7 @@ void loop()
   stm.Minute=gps.time.minute();
   stm.Second=gps.time.second();
   if(stm.Minute==0&&stm.Second==0){
-      RTC.write(stm);
+      //RTC.write(stm);
   }
   cnt+=1;
   if(cnt==60) {silentbeep();cnt=0;}
