@@ -3,7 +3,15 @@
 #include <beep.cpp>
 #include "TimeLib.h"
 #include "DS1307RTC.h"
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define OLED_RESET     -1 
+//#define SCREEN_ADDRESS 0x3D ///7A   78
 
+Adafruit_SSD1306 display(OLED_RESET);
 tmElements_t stm;
 
 #define difspeed 0.2
@@ -34,6 +42,14 @@ void DisplaySpeed(){
   Serial.print(speed);
   Serial.print("  --  ");
   prevspeed=speed;
+/*
+  display.clearDisplay(); // очистка дисплея
+  display.setTextSize(2); // установка размера шрифта
+  display.setTextColor(WHITE); // установка цвета текста
+  display.setCursor(0, 0); // установка курсора в позицию X = 0; Y = 0
+  display.print (speed); // записываем в буфер дисплея нашу фразу
+  display.display(); // и её выводим на экран
+  */
   }
 }
 
@@ -49,13 +65,26 @@ void DisplayDatetime(tmElements_t stm){
   Serial.print(stm.Minute);
   Serial.print(":");  
   Serial.println(stm.Second);
+
+    display.clearDisplay(); // очистка дисплея
+  display.setTextSize(2); // установка размера шрифта
+  display.setTextColor(WHITE); // установка цвета текста
+  display.setCursor(0, 0); // установка курсора в позицию X = 0; Y = 0
+  display.print (stm.Hour); 
+  display.print(":");  
+  display.print(stm.Minute);
+  display.print(":");  
+  display.println(stm.Second);
+  display.display(); // и её выводим на экран
+
+ 
 }
 
 int cnt=1;
 void setup()
 {
   initbeep();
-  dshortbeep();
+  //dshortbeep();
 /*
   tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
   // Use this initializer (uncomment) if you're using a 1.44" TFT
@@ -66,6 +95,16 @@ void setup()
   tft.setTextWrap(true);
   tft.print("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ");
  */
+ display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+   // инициализация дисплея по интерфейсу I2C, адрес 0x3C для обычного дисплея 128-674
+   //
+  display.clearDisplay(); // очистка дисплея
+  display.setTextSize(3); // установка размера шрифта
+  display.setTextColor(WHITE); // установка цвета текста
+  display.setCursor(0, 0); // установка курсора в позицию X = 0; Y = 0
+  display.print ("Hello, world!"); // записываем в буфер дисплея нашу фразу
+  display.display(); // и её выводим на экран
+ 
 
 
   Serial.begin(115200);
@@ -82,7 +121,7 @@ void setup()
 
 void loop()
 {
-  DisplaySpeed();
+  
   stm.Day=gps.date.day();
   stm.Month=gps.date.month();
   stm.Year=CalendarYrToTm(gps.date.year());
@@ -99,7 +138,8 @@ void loop()
    */
   //if (RTC.read(stm)) {
      
-    DisplayDatetime(stm); 
+    DisplayDatetime(stm);
+    DisplaySpeed(); 
    //}
 
 /*
