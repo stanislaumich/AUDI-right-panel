@@ -11,8 +11,8 @@
 
 //#define USE_MICRO_WIRE
 #include "GyverOLED.h"
-GyverOLED oled;
-
+GyverOLED oled(0x3C);
+//GyverOLED<SSD1306_128x64, OLED_NO_BUFFER> oled;
 
 
 //#define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -94,10 +94,11 @@ void setup()
 {
   initbeep();
   //dshortbeep();
-oled.init(OLED128x64);
+oled.init(OLED128x64,900);
   oled.clear();
   oled.home();
-
+  //oled.setScale(3);
+  oled.scale2X();
 
 /*
   tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
