@@ -16,11 +16,11 @@ GyverOLED oled(0x3C);
 
 
 //#define SCREEN_WIDTH 128 // OLED display width, in pixels
-//#define SCREEN_HEIGHT 32 // OLED display height, in pixels
-#define OLED_RESET     -1 
+//#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+//#define OLED_RESET     -1 
 //#define SCREEN_ADDRESS 0x3D ///7A   78
+//Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-//Adafruit_SSD1306 display(OLED_RESET);
 tmElements_t stm;
 
 #define difspeed 0.2
@@ -94,12 +94,23 @@ void setup()
 {
   initbeep();
   //dshortbeep();
-oled.init(OLED128x64,900);
+  oled.init(OLED128x64,900);
   oled.clear();
   oled.home();
   //oled.setScale(3);
   oled.scale2X();
-
+/*
+if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
+    Serial.println(F("SSD1306 allocation failed"));
+    //for(;;); // Don't proceed, loop forever
+  }
+display.clearDisplay();
+  display.setTextSize(2); // Draw 2X-scale text
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(10, 0);
+  display.println(F("scroll"));
+  display.display();
+*/
 /*
   tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
   // Use this initializer (uncomment) if you're using a 1.44" TFT
