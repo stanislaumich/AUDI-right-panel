@@ -11,7 +11,7 @@
 
 //#define USE_MICRO_WIRE
 #include "GyverOLED.h"
-GyverOLED oled(0x3C);
+GyverOLED oled(0x3D);//3C   3D
 //GyverOLED<SSD1306_128x64, OLED_NO_BUFFER> oled;
 
 
