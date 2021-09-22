@@ -10,6 +10,8 @@
             "includePath": [
                 "S:/microcontrollers/NANO328/AUDI-right-panel/include",
                 "S:/microcontrollers/NANO328/AUDI-right-panel/src",
+                "S:/microcontrollers/NANO328/AUDI-right-panel/lib/iarduino_OLED_txt-1.1.0/src",
+                "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                 "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/variants/eightanaloginputs",
                 "S:/microcontrollers/NANO328/AUDI-right-panel/lib/Adafruit-GFX-Library-master",
@@ -29,7 +31,6 @@
                 "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                 "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                 "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
-                "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                 ""
             ],
             "browse": {
@@ -37,6 +38,8 @@
                 "path": [
                     "S:/microcontrollers/NANO328/AUDI-right-panel/include",
                     "S:/microcontrollers/NANO328/AUDI-right-panel/src",
+                    "S:/microcontrollers/NANO328/AUDI-right-panel/lib/iarduino_OLED_txt-1.1.0/src",
+                    "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                     "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/variants/eightanaloginputs",
                     "S:/microcontrollers/NANO328/AUDI-right-panel/lib/Adafruit-GFX-Library-master",
@@ -56,7 +59,6 @@
                     "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                     "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                     "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
-                    "C:/Users/Lz42/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
                     ""
                 ]
             },
